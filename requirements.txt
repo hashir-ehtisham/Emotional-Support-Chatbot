@@ -1,0 +1,15 @@
+huggingface_hub==0.22.2
+gradio
+torch
+timm
+sentencepiece
+transformers
+httpx==0.24.1
+edge-tts 
+soxr 
+pydub 
+sentencepiece 
+onnxruntime
+asyncio
+beautifulsoup4>=4.9
+requests>=2.20
