@@ -1,11 +1,11 @@
 import gradio as gr
+import os
 from huggingface_hub import InferenceClient
 
 # CSS to hide footer and customize button
 css = """
 footer {display:none !important}
 .output-markdown{display:none !important}
-
 .gr-button-primary {
     z-index: 14;
     height: 43px;
@@ -50,23 +50,19 @@ footer {display:none !important}
     --tw-bg-opacity: 1 !important;
     background-color: rgb(229,225,255) !important;
 }
-
 .to-orange-200 {
     --tw-gradient-to: rgb(37 56 133 / 37%) !important;
 }
-
 .from-orange-400 {
     --tw-gradient-from: rgb(17, 20, 45) !important;
     --tw-gradient-to: rgb(255 150 51 / 0);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
 }
-
 .group-hover\:from-orange-500 {
     --tw-gradient-from:rgb(17, 20, 45) !important; 
     --tw-gradient-to: rgb(37 56 133 / 37%);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
 }
-
 .group:hover .group-hover\:text-orange-500 {
     --tw-text-opacity: 1 !important;
     color:rgb(37 56 133 / var(--tw-text-opacity)) !important;
@@ -74,7 +70,10 @@ footer {display:none !important}
 """
 
 # Initialize the InferenceClient for chatbot
-client = InferenceClient("HuggingFaceH4/zephyr-7b-alpha")
+client = InferenceClient(
+    model="microsoft/phi-4",
+    token=os.getenv("HF_TOKEN1")
+)
 
 # Define the function for chatbot response
 def respond(
@@ -211,7 +210,7 @@ with gr.Blocks(css=css) as demo:
         gr.Markdown("# Emotions Detector")
         gr.Markdown(emotions_detector_tagline)
         
-        system_message_emotions = gr.Textbox(value="You are an Emotions Detector Chatbot. Analyze the tone of the message (happy, sad, angry, neutral) and answer back.", visible=False)
+        system_message_emotions = gr.Textbox(value="You are an Emotion and Tone Detection Assistant whose sole purpose is to analyze any given text and identify its emotional tone (such as happy, sad, angry, neutral) and style. For every input, determine the tone and clearly state it, followed by a concise suggestion on how the wording could be improved or made more suitable for the intended audience or purpose. If the tone is casual, slang-heavy, or friendly, note that it works well in informal contexts and suggest how it could be adapted for professional communication. If the tone is neutral, state its appropriateness for the specific context it appears to be used in. Your role is not to chat or engage in conversation but to provide analytical feedback and improvement suggestions only.", visible=False)
         chatbot_emotions = gr.Chatbot()
         msg_emotions = gr.Textbox(label="Your message")
         clear_emotions = gr.Button("Clear")
@@ -239,7 +238,7 @@ with gr.Blocks(css=css) as demo:
         gr.Markdown("# Jokes for You")
         gr.Markdown(jokes_tagline)
         
-        system_message_jokes = gr.Textbox(value="You are a friendly Jokes Chatbot. Provide a joke when asked.", visible=False)
+        system_message_jokes = gr.Textbox(value="You are a Friendly Jokes Chatbot whose sole purpose is to provide jokes when asked. Always ensure each joke is unique, original, and not repeated within the same session. Keep track of previously told jokes and avoid reusing them. Rotate topics to maintain variety, ensuring jokes cover different themes such as everyday life, wordplay, puns, animals, professions, and more, rather than focusing repeatedly on a single subject. All jokes must be appropriate for all audiences, easy to understand, and engaging. Your role is to deliver humor only when prompted, without engaging in unrelated conversation.", visible=False)
         chatbot_jokes = gr.Chatbot()
         msg_jokes = gr.Textbox(label="Your message")
         clear_jokes = gr.Button("Clear")
